@@ -4,11 +4,12 @@ if delivery_environment == 'delivered'
   # Pull the encrypted secrets from the Chef Server
   secrets = get_project_secrets
 
-  # Deploy to Github
-  delivery_github 'chef-cookbooks/delivery-truck' do
+  github_repo = node['delivery']['config']['delivery-truck']['publish']['github']
+
+  delivery_github github_repo do
     deploy_key secrets['github']
     branch node['delivery']['change']['pipeline']
-    remote_url 'git@github.com:chef-cookbooks/delivery-truck.git'
+    remote_url "git@github.com:#{github_repo}.git"
     repo_path node['delivery']['workspace']['repo']
     cache_path node['delivery']['workspace']['cache']
     action :push

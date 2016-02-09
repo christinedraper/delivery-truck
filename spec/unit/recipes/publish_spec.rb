@@ -189,6 +189,7 @@ describe "delivery-truck::publish" do
       end
 
       context 'when secrets are properly set' do
+        let(:supermarket_tmp_path) { '/tmp/cache/supermarket.pem' }
         let(:secrets) do
           {
             'supermarket_user' => 'test-user',
@@ -196,7 +197,14 @@ describe "delivery-truck::publish" do
           }
         end
 
-        let(:expected_extra_args) { ' -u test-user -k test-key' }
+        let(:expected_extra_args) { " -u test-user -k #{supermarket_tmp_path}" }
+
+        before do
+          file = instance_double('File')
+          allow(File).to receive(:new).with(supermarket_tmp_path, 'w+').and_return(file)
+          allow(file).to receive(:write).with('test-key')
+          allow(file).to receive(:close)
+        end
 
         it_behaves_like 'properly working supermarket upload'
       end

@@ -36,7 +36,13 @@ if delivery_environment == get_acceptance_environment
       Chef::Log.fatal "If supermarket-custom-credentials is set to true, you must add supermarket_key to the secrets data bag."
       raise RuntimeError, "supermarket-custom-credentials was true and supermarket_key was not defined in delivery secrets."
     end
-    custom_supermarket_credentials_options << " -k #{secrets['supermarket_key']}"
+
+    # write the supermarket_key to a file on disk since knife needs a file
+    supermarket_tmp_key_path = File.join(node['delivery']['workspace']['cache'], "supermarket.pem")
+    f = File.new(supermarket_tmp_key_path, "w+")
+    f.write(secrets['supermarket_key'])
+    f.close
+    custom_supermarket_credentials_options << " -k #{supermarket_tmp_key_path}"
   end
 
   directory cookbook_directory_supermarket do

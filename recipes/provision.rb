@@ -29,8 +29,9 @@ ruby_block "copy env from prior to current" do
         ::DeliveryTruck::Helpers::Provision.handle_union_pinnings(node, get_acceptance_environment, get_all_project_cookbooks)
       when 'rehearsal'
         Chef::Log.fatal("..in rehearsal")
+        Chef::Log.fatal(::DeliveryTruck::Helpers::Provision.method(:handle_rehearsal_pinnings).source_location)
         logger = Proc.new { |messsage| Chef::Log.fatal(message) }
-        ::DeliveryTruck::Helpers::Provision.handle_rehearsal_pinnings(node, logger)
+        ::DeliveryTruck::Helpers::Provision.handle_rehearsal_pinnings(node, logger, Chef::Log)
       else
         ::DeliveryTruck::Helpers::Provision.handle_delivered_pinnings(node)
       end

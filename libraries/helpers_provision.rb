@@ -115,7 +115,8 @@ module DeliveryTruck
         union_env
       end
 
-      def handle_rehearsal_pinnings(node, logger)
+      def handle_rehearsal_pinnings(node, logger, log)
+        log.fatal("In handle rehearsal pinnings (0)")
         logger.call("In handle rehearsal pinnings")
         Chef::Log.fatal("In handle rehearsal pinnings (2)")
         chef_log.fatal("In handle rehearsal pinnings (3)")

@@ -20,6 +20,7 @@
 ruby_block "copy env from prior to current" do
   block do
     with_server_config do
+      Chef::Log.fatal("Top of provision block")
       stage_name = node['delivery']['change']['stage']
       case stage_name
       when 'acceptance'
@@ -27,7 +28,8 @@ ruby_block "copy env from prior to current" do
       when 'union'
         ::DeliveryTruck::Helpers::Provision.handle_union_pinnings(node, get_acceptance_environment, get_all_project_cookbooks)
       when 'rehearsal'
-        ::DeliveryTruck::Helpers::Provision.handle_rehearsal_pinnings(node)
+        logger = Proc.new { |messsage| Chef::Log.fatal(message) }
+        ::DeliveryTruck::Helpers::Provision.handle_rehearsal_pinnings(node, logger)
       else
         ::DeliveryTruck::Helpers::Provision.handle_delivered_pinnings(node)
       end

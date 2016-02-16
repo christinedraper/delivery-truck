@@ -115,13 +115,14 @@ module DeliveryTruck
         union_env
       end
 
-      def handle_rehearsal_pinnings(node)
+      def handle_rehearsal_pinnings(node, logger)
+        logger.call("In handle rehearsal pinnings")
         blocked = ::DeliveryTruck::DeliveryApiClient.blocked_projects(node)
 
         union_env = fetch_or_create_environment('union')
         rehearsal_env = fetch_or_create_environment('rehearsal')
 
-        chef_log.fatal("Promoting environment from #{union_env.name} to #{rehearsal_env.name}")
+        logger.call("Promoting environment from #{union_env.name} to #{rehearsal_env.name}")
         chef_log.fatal("Blocked projects are #{blocked}")
 
         promote_unblocked_cookbooks_and_applications(union_env, rehearsal_env, blocked)

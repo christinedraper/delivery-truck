@@ -121,8 +121,8 @@ module DeliveryTruck
         union_env = fetch_or_create_environment('union')
         rehearsal_env = fetch_or_create_environment('rehearsal')
 
-        chef_log.warn("Promoting environment from #{union_env.name} to #{rehearsal_env.name}")
-        chef_log.warn("Blocked projects are #{blocked}")
+        chef_log.fatal("Promoting environment from #{union_env.name} to #{rehearsal_env.name}")
+        chef_log.fatal("Blocked projects are #{blocked}")
 
         promote_unblocked_cookbooks_and_applications(union_env, rehearsal_env, blocked)
 
@@ -326,7 +326,7 @@ module DeliveryTruck
 
       def promote_unblocked_cookbooks_and_applications(promoted_from_env, promoted_on_env, blocked)
         if blocked.empty?
-          chef_log.error("No projects blocked, moving all pinnings from #{promoted_from_env.name}" +
+          chef_log.fatal("No projects blocked, moving all pinnings from #{promoted_from_env.name}" +
                         " to #{promoted_on_env.name}")
           promote_cookbook_versions(promoted_from_env, promoted_on_env)
           promote_default_attributes(promoted_from_env, promoted_on_env)
@@ -338,15 +338,15 @@ module DeliveryTruck
         promoted_on_env.default_attributes['delivery']['project_artifacts'] ||= {}
         promoted_on_env.override_attributes['applications'] ||= {}
 
-        chef_log.error("#{promoted_on_env.name} before promotion: " +
+        chef_log.fatal("#{promoted_on_env.name} before promotion: " +
                       "#{promoted_on_env.cookbook_versions.inspect}")
 
         promoted_from_env.default_attributes['delivery']['project_artifacts'].each do |project_name, project_contents|
           if blocked.include?(project_name)
-            chef_log.warn("Project #{project_name} is currently blocked." +
+            chef_log.fatal("Project #{project_name} is currently blocked." +
                           "not promoting its cookbooks or applications")
           else
-            chef_log.warn("Promoting cookbooks and applications for project #{project_name}")
+            chef_log.fatal("Promoting cookbooks and applications for project #{project_name}")
 
             # promote cookbooks
             project_contents['cookbooks'].each do |cookbook_name|
@@ -362,7 +362,7 @@ module DeliveryTruck
             end
           end
         end
-        chef_log.error("#{promoted_on_env.name} after promotion: " +
+        chef_log.fatal("#{promoted_on_env.name} after promotion: " +
                       "#{promoted_on_env.cookbook_versions.inspect}")
       end
 

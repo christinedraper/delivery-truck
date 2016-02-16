@@ -117,6 +117,8 @@ module DeliveryTruck
 
       def handle_rehearsal_pinnings(node, logger)
         logger.call("In handle rehearsal pinnings")
+        Chef::Log.fatal("In handle rehearsal pinnings (2)")
+        chef_log.fatal("In handle rehearsal pinnings (3)")
         blocked = ::DeliveryTruck::DeliveryApiClient.blocked_projects(node)
 
         union_env = fetch_or_create_environment('union')

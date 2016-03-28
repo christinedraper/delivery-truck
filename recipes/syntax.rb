@@ -15,7 +15,6 @@
 # limitations under the License.
 #
 
-throw changed
 changed = changed_cookbooks
 ::Chef::Log.warn("The following cookbooks have changed: #{changed.inspect}")
 changed.each do |cookbook|

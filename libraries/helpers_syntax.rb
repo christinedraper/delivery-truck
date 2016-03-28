@@ -41,8 +41,6 @@ module DeliveryTruck
       # @return [TrueClass, FalseClass]
       #
       def bumped_version?(path, node)
-        throw node.inspect
-        ghjkljklll
         ::Chef::Log.warn(node.inspect)
         change = DeliverySugar::Change.new(node)
         modified_files = change.changed_files

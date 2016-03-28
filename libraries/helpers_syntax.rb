@@ -41,7 +41,7 @@ module DeliveryTruck
       # @return [TrueClass, FalseClass]
       #
       def bumped_version?(path, node)
-        STDERR.puts(node.inspect)
+        puts(node.inspect)
         change = DeliverySugar::Change.new(node)
         modified_files = change.changed_files
 
@@ -63,13 +63,13 @@ module DeliveryTruck
 
         clean_relative_dir = relative_dir == "." ? "" : Regexp.escape("#{relative_dir}/")
 
-        STDERR.puts(modified_files)
+        puts(modified_files)
         if modified_files.any? { |f| /^#{clean_relative_dir}(#{files_to_check})/ =~ f }
           base = change.merge_sha.empty? ? "origin/#{change.pipeline}" : "#{change.merge_sha}~1"
           base_metadata = change.cookbook_metadata(relative_dir, base)
-          STDERR.puts("base: #{base}")
-          STDERR.puts("change.cookbook_metadata(path).version: #{change.cookbook_metadata(path).version}")
-          STDERR.puts("old version: #{base_metadata.version}") unless base_metadata.nil?
+          puts("base: #{base}")
+          puts("change.cookbook_metadata(path).version: #{change.cookbook_metadata(path).version}")
+          puts("old version: #{base_metadata.version}") unless base_metadata.nil?
           base_metadata.nil? ||
             change.cookbook_metadata(path).version != base_metadata.version
         else

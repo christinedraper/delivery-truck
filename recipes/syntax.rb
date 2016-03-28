@@ -15,7 +15,9 @@
 # limitations under the License.
 #
 
-changed_cookbooks.each do |cookbook|
+changed = changed_cookbooks
+::Chef::Log.warn("The following cookbooks have changed: #{changed.inspect}")
+changed.each do |cookbook|
   # If we changed a cookbook but didn't bump the version than the build
   # phase will fail when trying to upload to the Chef Server.
   unless bumped_version?(cookbook.path)

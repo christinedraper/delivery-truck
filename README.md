@@ -44,7 +44,7 @@ to `correctness`.
       "foodcritic": {
         "ignore_rules": ["FC001"],
         "only_rules": ["FC002"],
-        "excludes": ["spec", "test"]
+        "excludes": ["spec", "test"],
         "fail_tags": ["any"]
       }
     }
